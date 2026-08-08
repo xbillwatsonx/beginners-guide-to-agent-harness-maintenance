@@ -1,0 +1,29 @@
+# Example Crontab
+
+This is an example crontab file with staggered, report-only maintenance jobs. Replace the script paths with your own.
+
+```text
+# Maintenance Crontab for MyAgent
+# All jobs are report-only. None delete, publish, or change config.
+# Last reviewed: 2026-08-08
+
+# Monday - Review and planning (report-only)
+0 9 * * 1  /home/user/scripts/check-updates.sh       # Check for available updates
+0 10 * * 1 /home/user/scripts/review-memory.sh        # Review memory health
+0 11 * * 1 /home/user/scripts/check-spend.sh          # Check provider costs
+0 12 * * 1 /home/user/scripts/check-connectors.sh     # Check connected services
+# 0 13 * * 1 /home/user/scripts/check-gateway.sh      # Disabled - no control UI exposed
+
+# Daily - Health and safety (report-only)
+0 7 * * *   /home/user/scripts/health-check.sh        # Daily health check
+0 8 * * *   /home/user/scripts/check-backups.sh       # Backup freshness
+0 8,20 * * * /home/user/scripts/watchdog.sh           # Session/job watchdog
+
+# Monthly - Deep checks (report-only)
+0 9 1-7 * 6 /home/user/scripts/cleanup-review.sh      # First Saturday - cleanup review
+0 10 1-7 * 6 /home/user/scripts/restore-drill.sh      # First Saturday - restore drill
+0 8 1-7 * 0 /home/user/scripts/smoke-test.sh          # First Sunday - full smoke test
+
+# How to disable a job: comment out the line with #
+# Example: # 0 7 * * * /home/user/scripts/health-check.sh  # Disabled 2026-08-08 - testing
+```

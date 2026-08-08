@@ -1,0 +1,5 @@
+downloads/
+INITIAL_PLAN.md
+__pycache__/
+*.pyc
+*:Zone.Identifier
