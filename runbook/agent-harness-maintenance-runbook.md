@@ -469,10 +469,15 @@ Backup date: <date and time>
 
 ```bash
 <harness stop command>
+# Reinstall the previous version (package manager installs only)
+<package manager> install -g <harness package>@<previous-version>
+# Example: npm install -g myagent@1.8.4
 # Restore config and workspace
 tar -xzf "$HOME/harness-backup-<timestamp>.tgz" -C "$HOME"
 <harness start command>
 ```
+
+Important: a tar backup restores your config and workspace, but it does not downgrade the agent software itself. If the update changed the package version, you must also reinstall the previous version before restoring state. Without the prior package version, restoring config files alone may not recover a working agent.
 
 **From a cloud provider snapshot:**
 
@@ -488,6 +493,29 @@ tar -xzf "$HOME/harness-backup-<timestamp>.tgz" -C "$HOME"
 3. Try restoring to a different location first to confirm the backup is valid.
 4. If the backup itself is corrupted, use the previous backup or the cloud snapshot.
 5. Ask your agent for help: "My restore failed with this error: <error>. Help me diagnose it."
+
+### Failed-Update Recovery (No Prewritten Rollback Plan)
+
+Sometimes an update fails and you never wrote a rollback plan. The recovery path is similar, but you must reconstruct the rollback steps:
+
+1. **Stop the agent.** Do not attempt fix-forward while the service is down and you are stressed.
+2. **Identify the prior version.** Check your package manager history, install logs, or the harness release page for the version you were on before the update.
+3. **Verify the backup.** Before restoring, check that the backup archive exists, has a plausible size, and is recent. Extract it to a temporary location and verify the expected config, workspace, and data files are present. Do not restore over the live system until you confirm the backup is usable.
+4. **Reinstall the prior version.** A tar backup restores config and workspace, but it does not downgrade the software itself. Reinstall the exact prior package version (for example, `npm install -g myagent@2.3.1`) before restoring state. If the exact prior version is not available from your package source, stop and seek package-specific guidance rather than improvising.
+5. **Restore state from backup.** Once the prior version is installed, extract the backup archive to the correct locations.
+6. **Start the agent and verify.** Run your smoke test. Confirm the version number matches the prior version. Check that scheduled jobs, connectors, and workspace access all work.
+7. **Document the incident.** Record the original command, exact error, root cause, backup validation result, rollback steps, smoke-test result, and prevention actions. Add release-note dependency review and exact-version rollback availability to your next preflight checklist.
+
+### When the Backup Is Incomplete or Uncertain
+
+If you are not sure the backup contains everything needed:
+
+1. Do not restore over the live system yet.
+2. Extract the backup to a temporary location.
+3. Compare the extracted contents against what your baseline checklist says must exist (config folder, workspace folder, data directory).
+4. If key state is absent, do not use this backup as your primary restore source. Look for an older backup or a cloud snapshot instead.
+5. If a partial restore is your only option, restore only the verified portions and manually reconstruct the rest from other sources (logs, memory files, project docs).
+6. In all cases, verify after restore with a smoke test before declaring recovery complete.
 
 ---
 
@@ -527,6 +555,23 @@ See `runbook/maintenance-crons.md` for detailed templates. Here is the summary:
 | 9 | Session/job watchdog | Daily | Checks for stuck sessions, looping jobs, abandoned tasks |
 | 10 | Monthly cleanup review | Monthly | Reports stale logs, old downloads, oversized caches (no deletion) |
 | 11 | Monthly restore drill | Monthly | Confirms backups are usable, restores to temp location, records proof |
+
+### Designing Your First Cron Jobs
+
+Before scheduling anything, design the jobs first and save the design for review. Do not install jobs until you have reviewed the design.
+
+For each job, define:
+
+- **Name**: what the job is called
+- **Frequency**: when it runs (e.g., daily at 7 AM, every Monday at 8 AM)
+- **Command**: the exact command or script path the job runs
+- **PASS output**: what a successful check looks like
+- **FAIL output**: what a failed check looks like
+- **Disable instruction**: how to turn the job off quickly
+
+Each launcher should be one tested script or a tiny harness-native launcher. The real checks belong in a script, skill, task file, or checklist. Do not put long multi-step instructions directly inside a cron payload.
+
+Test each launcher manually before scheduling it. Run the command by hand, confirm the output is what you expect, and only then add it to cron.
 
 ### Cron Syntax Quick Reference
 
