@@ -30,20 +30,20 @@ This runbook gives you a lightweight maintenance layer for your agent harness:
 
 ## What Is Included
 
-- [`runbook/agent-harness-maintenance-runbook.md`](runbook/agent-harness-maintenance-runbook.md) — full beginner-friendly guide.
-- [`runbook/quick-start-card.md`](runbook/quick-start-card.md) — one-page starter flow.
-- [`runbook/glossary.md`](runbook/glossary.md) — plain-language definitions.
-- [`runbook/update-decision-tree.md`](runbook/update-decision-tree.md) — when to update and when to wait.
-- [`runbook/maintenance-crons.md`](runbook/maintenance-crons.md) — safe scheduled maintenance jobs.
-- `AGENTS.md` — editing and release rules for agents working in this package.
-- `prompts/` — copy-paste prompts for walking an agent through maintenance setup.
-- `templates/` — reusable templates for baselines, backups, rollback plans, smoke tests, update logs, maintenance calendars, cron jobs, and reports.
-- `starter-kit/` — example maintenance calendar, crontab, health check checklist, and update log.
-- `examples/` — worked examples of a safe update plan, failed update triage, and a report-only cron summary.
-- [`validate-agent-harness-maintenance.py`](validate-agent-harness-maintenance.py) — dependency-free package checker.
-- [`make-release-zip.py`](make-release-zip.py) — dependency-free release zip builder.
-- [`CHANGELOG.md`](CHANGELOG.md) — package history.
-- [`LICENSE`](LICENSE) — MIT License.
+- [`runbook/agent-harness-maintenance-runbook.md`](runbook/agent-harness-maintenance-runbook.md): full beginner-friendly guide.
+- [`runbook/quick-start-card.md`](runbook/quick-start-card.md): one-page starter flow.
+- [`runbook/glossary.md`](runbook/glossary.md): plain-language definitions.
+- [`runbook/update-decision-tree.md`](runbook/update-decision-tree.md): when to update and when to wait.
+- [`runbook/maintenance-crons.md`](runbook/maintenance-crons.md): safe scheduled maintenance jobs.
+- `AGENTS.md`, editing and release rules for agents working in this package.
+- `prompts/`, copy-paste prompts for walking an agent through maintenance setup.
+- `templates/`, reusable templates for baselines, backups, rollback plans, smoke tests, update logs, maintenance calendars, cron jobs, and reports.
+- `starter-kit/`, example maintenance calendar, crontab, health check checklist, and update log.
+- `examples/`, worked examples of a safe update plan, failed update triage, and a report-only cron summary.
+- [`validate-agent-harness-maintenance.py`](validate-agent-harness-maintenance.py): dependency-free package checker.
+- [`make-release-zip.py`](make-release-zip.py): dependency-free release zip builder.
+- [`CHANGELOG.md`](CHANGELOG.md): package history.
+- [`LICENSE`](LICENSE): MIT License.
 
 ## Requirements
 
